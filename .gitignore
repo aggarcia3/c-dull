@@ -147,3 +147,10 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/c,flex,linux,macos,windows
+
+# Ficheros de compilación de Flex y Bison
+C-Dull
+analizador_sintactico.tab.c
+analizador_sintactico.tab.h
+lex.yy.c
+analizador_sintactico.output

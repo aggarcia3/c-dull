@@ -1,4 +1,4 @@
-%{ /* Codigo C */
+%{ /* Código C */
 	#include <stdlib.h>
 	#include <stdio.h>
 	#include <math.h>
@@ -29,20 +29,75 @@
 
 %%
 
- /* Gramatica */
+ /* Gramática */
 
 /************/
 /* PROGRAMA */
 /************/
 
+modulo
+    : lista_declaraciones                                                     { printf ("  modulo -> list_decl%s", DELIM_SALTO_LINEA); }
+    | lista_directivas_uso lista_declaraciones                                { printf ("  modulo -> lista_dir_uso list_decl%s", DELIM_SALTO_LINEA); }
+    ;
+
+lista_declaraciones
+    : declaracion                                                             { printf ("  list_decl -> decl%s", DELIM_SALTO_LINEA); }
+    | lista_declaraciones declaracion                                         { printf ("  list_decl -> list_decl decl%s", DELIM_SALTO_LINEA); }
+    ;
+
+declaracion
+    : declaracion_espacio_nombres                                             { printf ("  decl -> decl_esp_nom%s", DELIM_SALTO_LINEA); }
+    | declaracion_variable                                                    { printf ("  decl -> decl_var%s", DELIM_SALTO_LINEA); }
+    | declaracion_tipo                                                        { printf ("  decl -> decl_tipo%s", DELIM_SALTO_LINEA); }
+    | declaracion_funcion                                                     { printf ("  decl -> decl_func%s", DELIM_SALTO_LINEA); }
+    ;
+
+lista_directivas_uso
+    : directiva_uso                                                           { printf ("  lista_dir_uso -> dir_uso%s", DELIM_SALTO_LINEA); }
+    | lista_directivas_uso directiva_uso                                      { printf ("  lista_dir_uso -> lista_dir_uso dir_uso%s", DELIM_SALTO_LINEA); }
+    ;
+
+directiva_uso
+    : USING IDENTIFICADOR '=' nombre_tipo_o_espacio_nombres ';'               { printf ("  dir_uso -> USING ID = nom_tipo_o_esp_noms%s", DELIM_SALTO_LINEA); }
+    | USING nombre_tipo_o_espacio_nombres ';'                                 { printf ("  dir_uso -> nom_tipo_o_esp_noms%s", DELIM_SALTO_LINEA); }
+    ;
+
+nombre_tipo_o_espacio_nombres
+    : identificador_con_tipos                                                 { printf ("  nom_tipo_o_esp_noms -> id_tipos%s", DELIM_SALTO_LINEA); }
+    | nombre_tipo_o_espacio_nombres '.' identificador_con_tipos               { printf ("  nom_tipo_o_esp_noms -> nom_tipo_o_esp_noms . id_tipos%s", DELIM_SALTO_LINEA); }
+    ;
+
 identificador_con_tipos
-    : IDENTIFICADOR                                                           { printf ("  id_tipos -> ID\n"); }
+    : IDENTIFICADOR                                                           { printf ("  id_tipos -> ID%s", DELIM_SALTO_LINEA); }
+    | IDENTIFICADOR '(' lista_nombres_tipo_o_espacio_nombres ')'              { printf ("  id_tipos -> ID ( list_tipos )%s", DELIM_SALTO_LINEA); }
+    ;
+
+lista_nombres_tipo_o_espacio_nombres
+    : nombre_tipo_o_espacio_nombres                                           { printf ("  list_nom_tipo_o_esp_noms -> nom_tipo_o_esp_noms%s", DELIM_SALTO_LINEA); }
+    | lista_nombres_tipo_o_espacio_nombres ',' nombre_tipo_o_espacio_nombres  { printf ("  list_nom_tipo_o_esp_noms -> list_nom_tipo_o_esp_noms nom_tipo_o_esp_noms%s", DELIM_SALTO_LINEA); }
     ;
 
 /*******************/
 /* ESPACIO NOMBRES */
 /*******************/
 
+declaracion_espacio_nombres: NAMESPACE identificador_anidado bloque_espacio_nombres	{ printf("  decl_esp_noms -> NAMESPACE id_anidado blq_espacio_noms%s", DELIM_SALTO_LINEA); }
+;
+
+identificador_anidado
+    : IDENTIFICADOR									{ printf("  id_anidado -> ID%s", DELIM_SALTO_LINEA); }
+    | lista_identificadores_anidados IDENTIFICADOR					{ printf("  id_anidado -> list_id_anidados ID%s", DELIM_SALTO_LINEA); }
+;
+
+lista_identificadores_anidados
+    : IDENTIFICADOR '.'									{ printf("  list_id_anidados -> ID .%s", DELIM_SALTO_LINEA); }
+    | lista_identificadores_anidados IDENTIFICADOR '.'					{ printf("  list_id_anidados -> list_id_anidados ID .%s", DELIM_SALTO_LINEA); }
+;
+
+bloque_espacio_nombres
+    : '{' lista_declaraciones '}'							{ printf("  blq_espacio_noms -> { list_decl }%s", DELIM_SALTO_LINEA); }
+    | '{' lista_directivas_uso lista_declaraciones '}'					{ printf("  blq_espacio_noms -> { list_dir_uso list_decl }%s", DELIM_SALTO_LINEA); }
+;
 
 /*************/
 /* VARIABLES */
@@ -84,11 +139,9 @@ int yyerror(char* str) {
 	return 0;
 }
 
-int yywrap() {
+/*int yywrap() {
 	return 1;
-}
-
-
+}*/
 
 int main(int argc, char* argv[]) {
 	FILE* fichFuente;

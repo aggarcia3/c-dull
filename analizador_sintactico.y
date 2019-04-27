@@ -139,6 +139,7 @@ int yyerror(char* str) {
 	return 0;
 }
 
+/* TODO: ¿es esta definición realmente necesaria para que compile? */
 /*int yywrap() {
 	return 1;
 }*/

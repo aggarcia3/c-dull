@@ -1,5 +1,6 @@
-# Created by https://www.gitignore.io/api/c,flex,linux,macos,windows
-# Edit at https://www.gitignore.io/?templates=c,flex,linux,macos,windows
+
+# Created by https://www.gitignore.io/api/c,flex,linux,macos,windows,vim
+# Edit at https://www.gitignore.io/?templates=c,flex,linux,macos,windows,vim
 
 ### C ###
 # Prerequisites
@@ -121,6 +122,24 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+### Vim ###
+# Swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Session
+Session.vim
+
+# Temporary
+.netrwhist
+# Auto-generated tag files
+tags
+# Persistent undo
+[._]*.un~
+
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db
@@ -146,7 +165,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.gitignore.io/api/c,flex,linux,macos,windows
+# End of https://www.gitignore.io/api/c,flex,linux,macos,windows,vim
 
 # Ficheros de compilación de Flex y Bison
 C-Dull

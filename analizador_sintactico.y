@@ -46,44 +46,44 @@
 modulo
     : lista_declaraciones							{ printf ("  modulo -> list_decl%s", DELIM_SALTO_LINEA); }
     | lista_directivas_uso lista_declaraciones					{ printf ("  modulo -> lista_dir_uso list_decl%s", DELIM_SALTO_LINEA); }
-    ;
+;
 
 lista_declaraciones
     : declaracion								{ printf ("  list_decl -> decl%s", DELIM_SALTO_LINEA); }
     | lista_declaraciones declaracion						{ printf ("  list_decl -> list_decl decl%s", DELIM_SALTO_LINEA); }
-    ;
+;
 
 declaracion
     : declaracion_espacio_nombres						{ printf ("  decl -> decl_esp_nom%s", DELIM_SALTO_LINEA); }
     | declaracion_variable							{ printf ("  decl -> decl_var%s", DELIM_SALTO_LINEA); }
     | declaracion_tipo								{ printf ("  decl -> decl_tipo%s", DELIM_SALTO_LINEA); }
     | declaracion_funcion							{ printf ("  decl -> decl_func%s", DELIM_SALTO_LINEA); }
-    ;
+;
 
 lista_directivas_uso
     : directiva_uso								{ printf ("  lista_dir_uso -> dir_uso%s", DELIM_SALTO_LINEA); }
     | lista_directivas_uso directiva_uso					{ printf ("  lista_dir_uso -> lista_dir_uso dir_uso%s", DELIM_SALTO_LINEA); }
-    ;
+;
 
 directiva_uso
     : USING IDENTIFICADOR '=' nombre_tipo_o_espacio_nombres ';'			{ printf ("  dir_uso -> USING ID = nom_tipo_o_esp_noms%s", DELIM_SALTO_LINEA); }
     | USING nombre_tipo_o_espacio_nombres ';'					{ printf ("  dir_uso -> nom_tipo_o_esp_noms%s", DELIM_SALTO_LINEA); }
-    ;
+;
 
 nombre_tipo_o_espacio_nombres
     : identificador_con_tipos							{ printf ("  nom_tipo_o_esp_noms -> id_tipos%s", DELIM_SALTO_LINEA); }
     | nombre_tipo_o_espacio_nombres '.' identificador_con_tipos			{ printf ("  nom_tipo_o_esp_noms -> nom_tipo_o_esp_noms . id_tipos%s", DELIM_SALTO_LINEA); }
-    ;
+;
 
 identificador_con_tipos
     : IDENTIFICADOR								{ printf ("  id_tipos -> ID%s", DELIM_SALTO_LINEA); }
     | IDENTIFICADOR '(' lista_nombres_tipo_o_espacio_nombres ')'		{ printf ("  id_tipos -> ID ( list_tipos )%s", DELIM_SALTO_LINEA); }
-    ;
+;
 
 lista_nombres_tipo_o_espacio_nombres
     : nombre_tipo_o_espacio_nombres						{ printf ("  list_nom_tipo_o_esp_noms -> nom_tipo_o_esp_noms%s", DELIM_SALTO_LINEA); }
     | lista_nombres_tipo_o_espacio_nombres ',' nombre_tipo_o_espacio_nombres	{ printf ("  list_nom_tipo_o_esp_noms -> list_nom_tipo_o_esp_noms nom_tipo_o_esp_noms%s", DELIM_SALTO_LINEA); }
-    ;
+;
 
 /*******************/
 /* ESPACIO NOMBRES */
@@ -305,13 +305,14 @@ expresion_suma
 ;
 
 expresion_multiplicacion
-    : expresion_multiplicacion '*' expresion_cast	{ printf("  expr_mult -> expr_mult * expr_cast%s", DELIM_SALTO_LINEA); }
-    | expresion_multiplicacion '/' expresion_cast	{ printf("  expr_mult -> expr_mult / expr_cast%s", DELIM_SALTO_LINEA); }
-    | expresion_multiplicacion '%' expresion_cast	{ printf("  expr_mult -> expr_mult % expr_cast%s", DELIM_SALTO_LINEA); }
-    | expresion_cast					{ printf("  expr_mult -> expr_cast%s", DELIM_SALTO_LINEA); }
+    : expresion_multiplicacion '*' expresion	{ printf("  expr_mult -> expr_mult * expr_cast%s", DELIM_SALTO_LINEA); }
+    | expresion_multiplicacion '/' expresion	{ printf("  expr_mult -> expr_mult / expr_cast%s", DELIM_SALTO_LINEA); }
+    | expresion_multiplicacion '%' expresion	{ printf("  expr_mult -> expr_mult % expr_cast%s", DELIM_SALTO_LINEA); }
+    | expresion					{ printf("  expr_mult -> expr_cast%s", DELIM_SALTO_LINEA); }
 ;
 
-expresion_logica: expresion_or_logico { printf("  expr_logica -> expr_or_logico%s", DELIM_SALTO_LINEA); }
+ /* TODO: reemplazar lado derecho de la regla con el apropiado */
+expresion_logica: expresion_cast { printf("  expr_logica -> expr_or_logico%s", DELIM_SALTO_LINEA); }
 ;
 
 expresion

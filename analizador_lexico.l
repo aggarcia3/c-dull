@@ -14,6 +14,7 @@
 	extern int codigoSalida;
 
 	void mostrarErrorSintaxis(void);
+	void mostrarTokenEncontrado(char*);
 %}
 
 PALABRA_RESERVADA		auto|base|boolean|break|case|catch|class|char|continue|default|do|double|else|enum|extern|false|finally|float|for|goto|if|include|int|interface|long|namespace|new|override|private|protected|public|return|sealed|short|signed|sizeof|static|struct|switch|this|throw|true|typedef|union|unsigned|using|virtual|void|while
@@ -42,94 +43,96 @@ SALTO_LINEA			\n
 %%
  /* Reglas */
  /* Palabras clave */
-auto									{ return AUTO; }
-base									{ return BASE; }
-boolean									{ return BOOLEAN; }
-break									{ return BREAK; }
-case									{ return CASE; }
-catch									{ return CATCH; }
-class									{ return CLASS; }
-char									{ return CHAR; }
-continue								{ return CONTINUE; }
-default									{ return DEFAULT; }
-do									{ return DO; }
-double									{ return DOUBLE; }
-else									{ return ELSE; }
-enum									{ return ENUM; }
-extern									{ return EXTERN; }
-false									{ return BOOLEANO; }
-finally									{ return FINALLY; }
-float									{ return FLOAT; }
-for									{ return FOR; }
-goto									{ return GOTO; }
-if									{ return IF; }
-include									{ return INCLUDE; }
-int									{ return INT; }
-interface								{ return INTERFACE; }
-long									{ return LONG; }
-namespace								{ return NAMESPACE; }
-new									{ return NEW; }
-override								{ return OVERRIDE; }
-private									{ return PRIVATE; }
-protected								{ return PROTECTED; }
-public									{ return PUBLIC; }
-return									{ return RETURN; }
-sealed									{ return SEALED; }
-short									{ return SHORT; }
-signed									{ return SIGNED; }
-sizeof									{ return SIZEOF; }
-static									{ return STATIC; }
-struct									{ return STRUCT; }
-switch									{ return SWITCH; }
-this									{ return THIS; }
-throw									{ return THROW; }
-true									{ return BOOLEANO; }
-typedef									{ return TYPEDEF; }
-union									{ return UNION; }
-unsigned								{ return UNSIGNED; }
-using									{ return USING; }
-virtual									{ return VIRTUAL; }
-void									{ return VOID; }
-while									{ return WHILE; }
+auto									{ mostrarTokenEncontrado("palabra reservada"); return AUTO; }
+base									{ mostrarTokenEncontrado("palabra reservada"); return BASE; }
+boolean									{ mostrarTokenEncontrado("palabra reservada"); return BOOLEAN; }
+break									{ mostrarTokenEncontrado("palabra reservada"); return BREAK; }
+case									{ mostrarTokenEncontrado("palabra reservada"); return CASE; }
+catch									{ mostrarTokenEncontrado("palabra reservada"); return CATCH; }
+class									{ mostrarTokenEncontrado("palabra reservada"); return CLASS; }
+char									{ mostrarTokenEncontrado("palabra reservada"); return CHAR; }
+continue								{ mostrarTokenEncontrado("palabra reservada"); return CONTINUE; }
+default									{ mostrarTokenEncontrado("palabra reservada"); return DEFAULT; }
+do									{ mostrarTokenEncontrado("palabra reservada"); return DO; }
+double									{ mostrarTokenEncontrado("palabra reservada"); return DOUBLE; }
+else									{ mostrarTokenEncontrado("palabra reservada"); return ELSE; }
+enum									{ mostrarTokenEncontrado("palabra reservada"); return ENUM; }
+extern									{ mostrarTokenEncontrado("palabra reservada"); return EXTERN; }
+false									{ mostrarTokenEncontrado("palabra reservada"); return BOOLEANO; }
+finally									{ mostrarTokenEncontrado("palabra reservada"); return FINALLY; }
+float									{ mostrarTokenEncontrado("palabra reservada"); return FLOAT; }
+for									{ mostrarTokenEncontrado("palabra reservada"); return FOR; }
+goto									{ mostrarTokenEncontrado("palabra reservada"); return GOTO; }
+if									{ mostrarTokenEncontrado("palabra reservada"); return IF; }
+include									{ mostrarTokenEncontrado("palabra reservada"); return INCLUDE; }
+int									{ mostrarTokenEncontrado("palabra reservada"); return INT; }
+interface								{ mostrarTokenEncontrado("palabra reservada"); return INTERFACE; }
+long									{ mostrarTokenEncontrado("palabra reservada"); return LONG; }
+namespace								{ mostrarTokenEncontrado("palabra reservada"); return NAMESPACE; }
+new									{ mostrarTokenEncontrado("palabra reservada"); return NEW; }
+override								{ mostrarTokenEncontrado("palabra reservada"); return OVERRIDE; }
+private									{ mostrarTokenEncontrado("palabra reservada"); return PRIVATE; }
+protected								{ mostrarTokenEncontrado("palabra reservada"); return PROTECTED; }
+public									{ mostrarTokenEncontrado("palabra reservada"); return PUBLIC; }
+return									{ mostrarTokenEncontrado("palabra reservada"); return RETURN; }
+sealed									{ mostrarTokenEncontrado("palabra reservada"); return SEALED; }
+short									{ mostrarTokenEncontrado("palabra reservada"); return SHORT; }
+signed									{ mostrarTokenEncontrado("palabra reservada"); return SIGNED; }
+sizeof									{ mostrarTokenEncontrado("palabra reservada"); return SIZEOF; }
+static									{ mostrarTokenEncontrado("palabra reservada"); return STATIC; }
+struct									{ mostrarTokenEncontrado("palabra reservada"); return STRUCT; }
+switch									{ mostrarTokenEncontrado("palabra reservada"); return SWITCH; }
+this									{ mostrarTokenEncontrado("palabra reservada"); return THIS; }
+throw									{ mostrarTokenEncontrado("palabra reservada"); return THROW; }
+true									{ mostrarTokenEncontrado("palabra reservada"); return BOOLEANO; }
+typedef									{ mostrarTokenEncontrado("palabra reservada"); return TYPEDEF; }
+union									{ mostrarTokenEncontrado("palabra reservada"); return UNION; }
+unsigned								{ mostrarTokenEncontrado("palabra reservada"); return UNSIGNED; }
+using									{ mostrarTokenEncontrado("palabra reservada"); return USING; }
+virtual									{ mostrarTokenEncontrado("palabra reservada"); return VIRTUAL; }
+void									{ mostrarTokenEncontrado("palabra reservada"); return VOID; }
+while									{ mostrarTokenEncontrado("palabra reservada"); return WHILE; }
  /* Fin de palabras clave */
-{IDENTIFICADOR}								{ return IDENTIFICADOR; }
-{DELIMITADOR}								{ /* Todos los delimitadores consisten en un caracter */ return *yytext; }
-\+=									{ return SUMA_ASIG; }
--=									{ return RESTA_ASIG; }
-\*=									{ return MULT_ASIG; }
-\/=									{ return DIV_ASIG; }
-%=									{ return MOD_ASIG; }
-\<\<=									{ return DESPI_ASIG; }
-\>\>=									{ return DESPD_ASIG; }
-&=									{ return AND_ASIG; }
-\|=									{ return OR_ASIG; }
-^=									{ return XOR_ASIG; }
-\+\+									{ return INC; }
---									{ return DEC; }
-\<\<									{ return DESPI; }
-\>\>									{ return DESPD; }
-\>=									{ return GE; }
-\<=									{ return LE; }
-==									{ return EQ; }
-!=									{ return NEQ; }
-&&									{ return AND; }
-\|\|									{ return OR; }
--\>									{ return PTR_ACCESO; }
-{OPERADOR_UN_CARACTER}							{ return *yytext; }
-{NUMERO_DECIMAL}{EXPONENTE}						{ return REAL; }
-({NUMERO_DECIMAL})?\.{NUMERO_DECIMAL}{EXPONENTE}			{ return REAL; }
-{NUMERO_HEXADECIMAL}{EXPONENTE}						{ return REAL; }
-({NUMERO_HEXADECIMAL})?\.{NUMERO_HEXADECIMAL_NO_PREF}{EXPONENTE}	{ return REAL; }
-({NUMERO_DECIMAL})?\.{NUMERO_DECIMAL}					{ return REAL; }
-({NUMERO_HEXADECIMAL})?\.{NUMERO_HEXADECIMAL_NO_PREF}			{ return REAL; }
-{NUMERO_OCTAL}								{ return ENTERO; }
-{NUMERO_DECIMAL}							{ return ENTERO; }
-{NUMERO_HEXADECIMAL}							{ return ENTERO; }
-{CONSTANTE_CARACTER}							{ return CARACTER; }
+{IDENTIFICADOR}								{ mostrarTokenEncontrado("identificador"); return IDENTIFICADOR; }
+{DELIMITADOR}								{ mostrarTokenEncontrado("delimitador"); /* Todos los delimitadores consisten en un caracter */ return *yytext; }
+\+=									{ mostrarTokenEncontrado("operador"); return SUMA_ASIG; }
+-=									{ mostrarTokenEncontrado("operador"); return RESTA_ASIG; }
+\*=									{ mostrarTokenEncontrado("operador"); return MULT_ASIG; }
+\/=									{ mostrarTokenEncontrado("operador"); return DIV_ASIG; }
+%=									{ mostrarTokenEncontrado("operador"); return MOD_ASIG; }
+\<\<=									{ mostrarTokenEncontrado("operador"); return DESPI_ASIG; }
+\>\>=									{ mostrarTokenEncontrado("operador"); return DESPD_ASIG; }
+&=									{ mostrarTokenEncontrado("operador"); return AND_ASIG; }
+\|=									{ mostrarTokenEncontrado("operador"); return OR_ASIG; }
+^=									{ mostrarTokenEncontrado("operador"); return XOR_ASIG; }
+\+\+									{ mostrarTokenEncontrado("operador"); return INC; }
+--									{ mostrarTokenEncontrado("operador"); return DEC; }
+\<\<									{ mostrarTokenEncontrado("operador"); return DESPI; }
+\>\>									{ mostrarTokenEncontrado("operador"); return DESPD; }
+\>=									{ mostrarTokenEncontrado("operador"); return GE; }
+\<=									{ mostrarTokenEncontrado("operador"); return LE; }
+==									{ mostrarTokenEncontrado("operador"); return EQ; }
+!=									{ mostrarTokenEncontrado("operador"); return NEQ; }
+&&									{ mostrarTokenEncontrado("operador"); return AND; }
+\|\|									{ mostrarTokenEncontrado("operador"); return OR; }
+-\>									{ mostrarTokenEncontrado("operador"); return PTR_ACCESO; }
+{OPERADOR_UN_CARACTER}							{ mostrarTokenEncontrado("operador"); return *yytext; }
+{NUMERO_DECIMAL}{EXPONENTE}						{ mostrarTokenEncontrado("constante real decimal en notación científica de mantisa entera"); return REAL; }
+({NUMERO_DECIMAL})?\.{NUMERO_DECIMAL}{EXPONENTE}			{ mostrarTokenEncontrado("constante real decimal en notación científica de mantisa fraccionaria"); return REAL; }
+{NUMERO_HEXADECIMAL}{EXPONENTE}						{ mostrarTokenEncontrado("constante real hexadecimal en notación científica de mantisa entera"); return REAL; }
+({NUMERO_HEXADECIMAL})?\.{NUMERO_HEXADECIMAL_NO_PREF}{EXPONENTE}	{ mostrarTokenEncontrado("constante real hexadecimal en notación científica de mantisa fraccionaria"); return REAL; }
+({NUMERO_DECIMAL})?\.{NUMERO_DECIMAL}					{ mostrarTokenEncontrado("constante real decimal"); return REAL; }
+({NUMERO_HEXADECIMAL})?\.{NUMERO_HEXADECIMAL_NO_PREF}			{ mostrarTokenEncontrado("constante real hexadecimal"); return REAL; }
+{NUMERO_OCTAL}								{ mostrarTokenEncontrado("constante entera octal"); return ENTERO; }
+{NUMERO_DECIMAL}							{ mostrarTokenEncontrado("constante entera decimal"); return ENTERO; }
+{NUMERO_HEXADECIMAL}							{ mostrarTokenEncontrado("constante entera hexadecimal"); return ENTERO; }
+{CONSTANTE_CARACTER}							{ mostrarTokenEncontrado("caracter constante"); return CARACTER; }
 {CONSTANTE_CADENA}							{
 	size_t tamEntrada = yyleng;
 	char* actual = yytext;
 	size_t caracteresRestantes = tamEntrada;
+
+	mostrarTokenEncontrado("cadena constante");
 
 	/* Mientras queden al menos dos caracteres en yytext, ir contando los saltos de línea escapados */
 	while (caracteresRestantes > 1) {
@@ -158,6 +161,10 @@ while									{ return WHILE; }
 
 %%
  /* Código del usuario */
+
+void mostrarTokenEncontrado(char* tipo) {
+	printf("Línea %u, %s: %s%s", numLinea, tipo, yytext, DELIM_SALTO_LINEA);
+}
 
 void mostrarErrorSintaxis(void) {
 	fprintf(stderr, "Línea %u, token no reconocido: %s - se aborta el análisis%s", numLinea, yytext, DELIM_SALTO_LINEA);

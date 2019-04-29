@@ -121,8 +121,8 @@ declaracion_variable: 'v';
 
  /* TODO: reemplazar con las reglas de la gramática reales */
 nombre_tipo: 'n';
-
 declaracion_tipo: 't';
+tipo: 'u';
 
 /**********/
 /* CLASES */
@@ -159,10 +159,30 @@ lista_argumentos
     | lista_argumentos argumentos ';'		{ printf("  list_args -> list_args args ;%s", DELIM_SALTO_LINEA); }
 ;
 
+argumentos: nombre_tipo lista_variables		{ printf("  args -> nombre_tipo list_var%s", DELIM_SALTO_LINEA); }
+;
+
+lista_variables
+    : variable			{ printf("  list_var -> var%s", DELIM_SALTO_LINEA); }
+    | lista_variables variable	{ printf("  list_var -> list_var var%s", DELIM_SALTO_LINEA); }
+;
+
+nombre_tipo
+    : tipo				{ printf("  nom_tipo -> tipo%s", DELIM_SALTO_LINEA); }
+    | tipo lista_operadores_puntero	{ printf("  nom_tipo -> tipo list_op_puntero%s", DELIM_SALTO_LINEA); }
+;
+
+variable
+    : IDENTIFICADOR			{ printf("  var -> ID%s", DELIM_SALTO_LINEA); }
+    | IDENTIFICADOR '=' expresion	{ printf("  var -> ID = expr%s", DELIM_SALTO_LINEA); }
+;
+
 /*****************/
 /* INSTRUCCIONES */
 /*****************/
 
+ /* TODO: reemplazar con las reglas de la gramática reales */
+bloque_instrucciones: 'b';
 
 /***************/
 /* EXPRESIONES */
@@ -285,11 +305,7 @@ expresion_suma
 ;
 
 expresion_multiplicacion
-    : expresion_multiplicacion '*' expresion_logica	{ printf("  expr_mult -> expr_mult * expr_logica%s", DELIM_SALTO_LINEA); }
-    | expresion_multiplicacion '/' expresion_logica	{ printf("  expr_mult -> expr_mult / expr_logica%s", DELIM_SALTO_LINEA); }
-    | expresion_multiplicacion '%' expresion_logica	{ printf("  expr_mult -> expr_mult % expr_logica%s", DELIM_SALTO_LINEA); }
-    | expresion_logica					{ printf("  expr_mult -> expr_logica%s", DELIM_SALTO_LINEA); }
-    | expresion_multiplicacion '*' expresion_cast	{ printf("  expr_mult -> expr_mult * expr_cast%s", DELIM_SALTO_LINEA); }
+    : expresion_multiplicacion '*' expresion_cast	{ printf("  expr_mult -> expr_mult * expr_cast%s", DELIM_SALTO_LINEA); }
     | expresion_multiplicacion '/' expresion_cast	{ printf("  expr_mult -> expr_mult / expr_cast%s", DELIM_SALTO_LINEA); }
     | expresion_multiplicacion '%' expresion_cast	{ printf("  expr_mult -> expr_mult % expr_cast%s", DELIM_SALTO_LINEA); }
     | expresion_cast					{ printf("  expr_mult -> expr_cast%s", DELIM_SALTO_LINEA); }

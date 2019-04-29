@@ -133,9 +133,31 @@ declaracion_tipo: 't';
 /* FUNCIONES */
 /*************/
 
- /* TODO: reemplazar con las reglas de la gramática reales */
-declaracion_funcion: 'f';
+declaracion_funcion: firma_funcion bloque_instrucciones { printf("  decl_func -> firma_func blq_instr%s", DELIM_SALTO_LINEA); }
+;
 
+firma_funcion
+    : VOID IDENTIFICADOR parametros				{ printf("  firma_func -> VOID ID params%s", DELIM_SALTO_LINEA); }
+    | tipo IDENTIFICADOR parametros				{ printf("  firma_func -> tipo ID params%s", DELIM_SALTO_LINEA); }
+    | tipo lista_operadores_puntero IDENTIFICADOR parametros	{ printf("  firma_func -> tipo list_op_puntero ID params%s", DELIM_SALTO_LINEA); }
+;
+
+lista_operadores_puntero
+    : '*'				{ printf("  list_op_punt -> *%s", DELIM_SALTO_LINEA); }
+    | lista_operadores_puntero '*'	{ printf("  list_op_punt -> list_op_punt *%s", DELIM_SALTO_LINEA); }
+;
+
+parametros
+    : '(' ')'					{ printf("  params -> ( )%s", DELIM_SALTO_LINEA); }
+    | '(' argumentos ')'			{ printf("  params -> ( args )%s", DELIM_SALTO_LINEA); }
+    | '(' lista_argumentos ')'			{ printf("  params -> ( list_args )%s", DELIM_SALTO_LINEA); }
+    | '(' lista_argumentos argumentos ')'	{ printf("  params -> ( list_args args )%s", DELIM_SALTO_LINEA); }
+;
+
+lista_argumentos
+    : argumentos ';'				{ printf("  list_args -> args ;%s", DELIM_SALTO_LINEA); }
+    | lista_argumentos argumentos ';'		{ printf("  list_args -> list_args args ;%s", DELIM_SALTO_LINEA); }
+;
 
 /*****************/
 /* INSTRUCCIONES */

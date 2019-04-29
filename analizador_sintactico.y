@@ -3,8 +3,13 @@
 	#include <stdio.h>
 	#include <errno.h>
 
-	/* Modo depuración de Bison (salida más verbosa) */
+	/* Si está definido, la salida mostrará información verbosa acerca del funcionamiento interno del analizador */
+	#define SALIDA_VERBOSA
+
+#ifdef SALIDA_VERBOSA
+	/* Permite utilizar el modo de depuración de Bison. No lo activa por sí mismo */
 	#define YYDEBUG 1
+#endif
 
 	extern FILE *yyin;
 
@@ -289,7 +294,9 @@ int yyerror(char* str) {
 int main(int argc, char* argv[]) {
 	FILE* fichFuente;
 
+#ifdef SALIDA_VERBOSA
 	yydebug = 1;
+#endif
 
 	/* Solo podemos abrir un fichero si tenemos una ruta hacia él */
 	if (argc < 2) {

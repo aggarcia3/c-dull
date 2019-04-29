@@ -94,6 +94,27 @@ while									{ return WHILE; }
  /* Fin de palabras clave */
 {IDENTIFICADOR}								{ return IDENTIFICADOR; }
 {DELIMITADOR}								{ /* Todos los delimitadores consisten en un caracter */ return *yytext; }
+\+=									{ return SUMA_ASIG; }
+-=									{ return RESTA_ASIG; }
+\*=									{ return MULT_ASIG; }
+\/=									{ return DIV_ASIG; }
+%=									{ return MOD_ASIG; }
+\<\<=									{ return DESPI_ASIG; }
+\>\>=									{ return DESPD_ASIG; }
+&=									{ return AND_ASIG; }
+\|=									{ return OR_ASIG; }
+^=									{ return XOR_ASIG; }
+\+\+									{ return INC; }
+--									{ return DEC; }
+\<\<									{ return DESPI; }
+\>\>									{ return DESPD; }
+\>=									{ return GE; }
+\<=									{ return LE; }
+==									{ return EQ; }
+!=									{ return NEQ; }
+&&									{ return AND; }
+\|\|									{ return OR; }
+-\>									{ return PTR_ACCESO; }
 {OPERADOR_UN_CARACTER}							{ return *yytext; }
 {NUMERO_DECIMAL}{EXPONENTE}						{ return REAL; }
 ({NUMERO_DECIMAL})?\.{NUMERO_DECIMAL}{EXPONENTE}			{ return REAL; }

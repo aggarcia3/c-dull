@@ -163,3 +163,7 @@ void mostrarErrorSintaxis(void) {
 	fprintf(stderr, "Línea %u, token no reconocido: %s - se aborta el análisis%s", numLinea, yytext, DELIM_SALTO_LINEA);
 	codigoSalida = EXIT_FAILURE;
 }
+
+int yywrap() {
+	return 1;
+}

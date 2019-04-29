@@ -1,7 +1,6 @@
 %{ /* Código C */
 	#include <stdlib.h>
 	#include <stdio.h>
-	#include <math.h>
 	#include <errno.h>
 
 	/* Modo depuración de Bison (salida más verbosa) */

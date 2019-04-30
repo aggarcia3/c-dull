@@ -200,8 +200,12 @@ expresion_parentesis: '(' expresion ')' { printf("  expr_parentesis -> ( expr )%
 ;
 
 expresion_funcional
-    : identificador_anidado '(' ')'			{ printf("  expr_func -> id_anidado ( )%s", DELIM_SALTO_LINEA); }
-    | identificador_anidado '(' lista_expresiones ')'	{ printf("  expr_func -> id_anidado ( list_expr )%s", DELIM_SALTO_LINEA); }
+    : identificador_anidado '(' lista_expresiones_opt ')'	{ printf("  expr_func -> id_anidado ( list_expr_opt )%s", DELIM_SALTO_LINEA); }
+;
+
+lista_expresiones_opt
+    :					{ printf("  list_expr -> %s", DELIM_SALTO_LINEA); }
+    | lista_expresiones			{ printf("  list_expr -> lista_expr%s", DELIM_SALTO_LINEA); }
 ;
 
 lista_expresiones

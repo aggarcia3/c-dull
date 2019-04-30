@@ -305,14 +305,13 @@ expresion_suma
 ;
 
 expresion_multiplicacion
-    : expresion_multiplicacion '*' expresion	{ printf("  expr_mult -> expr_mult * expr_cast%s", DELIM_SALTO_LINEA); }
-    | expresion_multiplicacion '/' expresion	{ printf("  expr_mult -> expr_mult / expr_cast%s", DELIM_SALTO_LINEA); }
-    | expresion_multiplicacion '%' expresion	{ printf("  expr_mult -> expr_mult % expr_cast%s", DELIM_SALTO_LINEA); }
-    | expresion					{ printf("  expr_mult -> expr_cast%s", DELIM_SALTO_LINEA); }
+    : expresion_multiplicacion '*' expresion_cast	{ printf("  expr_mult -> expr_mult * expr_cast%s", DELIM_SALTO_LINEA); }
+    | expresion_multiplicacion '/' expresion_cast	{ printf("  expr_mult -> expr_mult / expr_cast%s", DELIM_SALTO_LINEA); }
+    | expresion_multiplicacion '%' expresion_cast	{ printf("  expr_mult -> expr_mult %% expr_cast%s", DELIM_SALTO_LINEA); }
+    | expresion_cast					{ printf("  expr_mult -> expr_cast%s", DELIM_SALTO_LINEA); }
 ;
 
- /* TODO: reemplazar lado derecho de la regla con el apropiado */
-expresion_logica: expresion_cast { printf("  expr_logica -> expr_or_logico%s", DELIM_SALTO_LINEA); }
+expresion_logica: expresion_or_logico { printf("  expr_logica -> expr_or_logico%s", DELIM_SALTO_LINEA); }
 ;
 
 expresion

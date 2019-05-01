@@ -4,7 +4,7 @@
 	#include <errno.h>
 
 	/* Si está definido, la salida mostrará información verbosa acerca del funcionamiento interno del analizador */
-	#define SALIDA_VERBOSA
+	//#define SALIDA_VERBOSA
 
 #ifdef SALIDA_VERBOSA
 	/* Permite utilizar el modo de depuración de Bison. No lo activa por sí mismo */
@@ -116,7 +116,12 @@ declaracion_variable: tipo lista_nombres ';'    { printf("  decl_var -> tipo lis
 
 lista_nombres
     : nombre    { printf("  list_nom -> nom%s", DELIM_SALTO_LINEA); }
-    | lista_nombres nombre    { printf("  list_nom -> list_nom nom%s", DELIM_SALTO_LINEA); }
+    | lista_nombres_separados_comas nombre    { printf("  list_nom -> list_nom_sep_comas nom%s", DELIM_SALTO_LINEA); }
+;
+
+lista_nombres_separados_comas
+    : nombre ','									{ printf("  list_nom_sep_comas -> nom ,%s", DELIM_SALTO_LINEA); }
+    | lista_nombres_separados_comas nombre ','					{ printf("  list_nom_sep_comas -> list_nom_sep_comas nom ,%s", DELIM_SALTO_LINEA); }
 ;
 
 tipo
@@ -161,17 +166,32 @@ dato
 
 dato_indexado
     : IDENTIFICADOR    { printf("  dato_index -> ID%s", DELIM_SALTO_LINEA); }
-    | IDENTIFICADOR '[' lista_expresiones ']'    { printf("  dato_index -> ID [ list_expr ]%s", DELIM_SALTO_LINEA); }
+    | IDENTIFICADOR lista_indices    { printf("  dato_index -> ID lista_indices%s", DELIM_SALTO_LINEA); }
+;
+
+lista_indices
+    : indice    { printf("  list_indices -> indice%s", DELIM_SALTO_LINEA); }
+    | lista_indices indice    { printf("  list_indices -> list_indices indice%s", DELIM_SALTO_LINEA); }
+;
+
+indice
+    : '[' ']'    { printf("  indice -> [ ]%s", DELIM_SALTO_LINEA); }
+    | '[' lista_expresiones ']'    { printf("  indice -> [ list_expr ]%s", DELIM_SALTO_LINEA); }
 ;
 
 valor
     : expresion    { printf("  valor -> expr%s", DELIM_SALTO_LINEA); }
-    | '{' lista_valores '}'    { printf("  valor -> list_val%s", DELIM_SALTO_LINEA); }
+    | '{' lista_valores '}'    { printf("  valor -> { list_val }%s", DELIM_SALTO_LINEA); }
 ;
 
 lista_valores
     : valor    { printf("  list_val -> val%s", DELIM_SALTO_LINEA); }
-    | lista_valores valor    { printf("  list_val -> list_val valor%s", DELIM_SALTO_LINEA); }
+    | lista_valores_separados_comas valor    { printf("  list_val -> list_val_sep_comas valor%s", DELIM_SALTO_LINEA); }
+;
+
+lista_valores_separados_comas
+    : valor ','									{ printf("  list_val_sep_comas -> val ,%s", DELIM_SALTO_LINEA); }
+    | lista_valores_separados_comas valor ','					{ printf("  list_val_sep_comas -> list_val_sep_comas val ,%s", DELIM_SALTO_LINEA); }
 ;
     
 /*********/
@@ -237,7 +257,7 @@ declaracion_interfaz
 
 herencia
     :    { printf("  herencia -> %s", DELIM_SALTO_LINEA); }
-    | ';' lista_nombres_tipo_o_espacio_nombres    { printf("  herencia -> ; list_nom_tipo_o_esp_noms%s", DELIM_SALTO_LINEA); }
+    | ':' lista_nombres_tipo_o_espacio_nombres    { printf("  herencia -> ; list_nom_tipo_o_esp_noms%s", DELIM_SALTO_LINEA); }
 ;
 
 cuerpo_interfaz
@@ -267,7 +287,12 @@ cuerpo_enum: '{' lista_declaraciones_miembro_enum '}'    { printf("  cuerpo_enum
 
 lista_declaraciones_miembro_enum
     : declaracion_miembro_enum    { printf("  list_decl_miembro_enum -> decl_miembro_enum%s", DELIM_SALTO_LINEA); }
-    | lista_declaraciones_miembro_enum declaracion_miembro_enum    { printf("  list_decl_miembro_enum -> list_decl_miembro_enum decl_miembro_enum%s", DELIM_SALTO_LINEA); }
+    | lista_declaraciones_miembro_enum_separadas_comas declaracion_miembro_enum    { printf("  list_decl_miembro_enum -> list_decl_miembro_enum_sep_comas decl_miembro_enum%s", DELIM_SALTO_LINEA); }
+;
+
+lista_declaraciones_miembro_enum_separadas_comas
+    : declaracion_miembro_enum ','									{ printf("  list_decl_miembro_enum_sep_comas -> decl_miembro_enum ,%s", DELIM_SALTO_LINEA); }
+    | lista_declaraciones_miembro_enum_separadas_comas declaracion_miembro_enum ','					{ printf("  list_decl_miembro_enum_sep_comas -> list_decl_miembro_enum_sep_comas decl_miembro_enum ,%s", DELIM_SALTO_LINEA); }
 ;
 
 declaracion_miembro_enum
@@ -368,7 +393,12 @@ argumentos: nombre_tipo lista_variables		{ printf("  args -> nombre_tipo list_va
 
 lista_variables
     : variable			{ printf("  list_var -> var%s", DELIM_SALTO_LINEA); }
-    | lista_variables variable	{ printf("  list_var -> list_var var%s", DELIM_SALTO_LINEA); }
+    | lista_variables_separadas_comas variable	{ printf("  list_var_sep_comas -> list_var var%s", DELIM_SALTO_LINEA); }
+;
+
+lista_variables_separadas_comas
+    : variable ','									{ printf("  list_var_sep_comas -> var ,%s", DELIM_SALTO_LINEA); }
+    | lista_variables_separadas_comas variable ','					{ printf("  list_var_sep_comas -> list_var_sep_comas variable ,%s", DELIM_SALTO_LINEA); }
 ;
 
 nombre_tipo
@@ -529,8 +559,13 @@ expresion_funcional
 ;
 
 lista_expresiones
-    : expresion				{ printf("  list_expr -> expr%s", DELIM_SALTO_LINEA); }
-    | lista_expresiones expresion	{ printf("  list_expr -> lista_expr expr%s", DELIM_SALTO_LINEA); }
+    : expresion			{ printf("  list_expr -> expr%s", DELIM_SALTO_LINEA); }
+    | lista_expresiones_separadas_comas expresion	{ printf("  list_expr -> list_expr_sep_comas expr%s", DELIM_SALTO_LINEA); }
+;
+
+lista_expresiones_separadas_comas
+    : expresion ','									{ printf("  list_expr_sep_comas -> expr ,%s", DELIM_SALTO_LINEA); }
+    | lista_expresiones_separadas_comas expresion ','					{ printf("  list_expr_sep_comas -> list_expr_sep_comas expr ,%s", DELIM_SALTO_LINEA); }
 ;
 
 expresion_creacion_objeto
@@ -623,9 +658,13 @@ expresion_desplazamiento
 ;
 
 expresion_suma
-    : expresion_suma '+' expresion_multiplicacion	{ printf("  expr_suma -> expr_suma + expr_mult%s", DELIM_SALTO_LINEA); }
-    | expresion_suma '-' expresion_multiplicacion	{ printf("  expr_suma -> expr_suma - expr_mult%s", DELIM_SALTO_LINEA); }
+    : expresion_suma operador_suma expresion_multiplicacion	{ printf("  expr_suma -> expr_suma operador_suma expr_mult%s", DELIM_SALTO_LINEA); }
     | expresion_multiplicacion				{ printf("  expr_suma -> expr_mult%s", DELIM_SALTO_LINEA); }
+;
+
+operador_suma
+    : '+'
+    | '-'
 ;
 
 expresion_multiplicacion

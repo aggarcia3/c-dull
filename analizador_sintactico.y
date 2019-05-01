@@ -257,7 +257,7 @@ declaracion_interfaz
 
 herencia
     :    { printf("  herencia -> %s", DELIM_SALTO_LINEA); }
-    | ':' lista_nombres_tipo_o_espacio_nombres    { printf("  herencia -> ; list_nom_tipo_o_esp_noms%s", DELIM_SALTO_LINEA); }
+    | ':' lista_nombres_tipo_o_espacio_nombres    { printf("  herencia -> : list_nom_tipo_o_esp_noms%s", DELIM_SALTO_LINEA); }
 ;
 
 cuerpo_interfaz
@@ -416,9 +416,14 @@ variable
 /*****************/
 
 instruccion
+    : instruccion_abierta
+    | instruccion_cerrada
+;
+
+instruccion_simple
     : bloque_instrucciones
     | instruccion_expresion
-    | instruccion_bifurcacion
+    | instruccion_caso_principal
     | instruccion_bucle
     | instruccion_salto
     | instruccion_destino_salto
@@ -462,10 +467,19 @@ operador_asignacion
     | OR_ASIG
 ;
 
-instruccion_bifurcacion
-    : IF '(' expresion ')' instruccion    { printf("  instr_bifurcacion -> IF ( expr ) instr%s", DELIM_SALTO_LINEA); }
-    | IF '(' expresion ')' instruccion ELSE instruccion    { printf("  instr_bifurcacion -> IF ( expr ) instr ELSE instr%s", DELIM_SALTO_LINEA); }
-    | SWITCH '(' expresion ')' '{' lista_instrucciones_caso '}'    { printf("  instr_bifurcacion -> SWITCH ( expr ) { list_instr_caso }%s", DELIM_SALTO_LINEA); }
+instruccion_caso_principal
+    : SWITCH '(' expresion ')' '{' lista_instrucciones_caso '}'    { printf("  instr_caso_ppal -> SWITCH ( expr ) { list_instr_caso }%s", DELIM_SALTO_LINEA); }
+;
+
+instruccion_abierta
+    : IF '(' expresion ')' instruccion_simple    { printf("  instr_ab -> IF ( expr ) instr_s%s", DELIM_SALTO_LINEA); }
+    | IF '(' expresion ')' instruccion_abierta    { printf("  instr_ab -> IF ( expr ) instr_ab%s", DELIM_SALTO_LINEA); }
+    | IF '(' expresion ')' instruccion_cerrada ELSE instruccion_abierta    { printf("  instr_ab -> IF ( expr ) instr_cerr ELSE instr_ab%s", DELIM_SALTO_LINEA); }
+;
+
+instruccion_cerrada
+    : instruccion_simple
+    | IF '(' expresion ')' instruccion_cerrada ELSE instruccion_cerrada
 ;
 
 lista_instrucciones_caso

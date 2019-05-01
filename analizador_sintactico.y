@@ -111,23 +111,227 @@ bloque_espacio_nombres
 /* VARIABLES */
 /*************/
 
- /* TODO: reemplazar con las reglas de la gramática reales */
-declaracion_variable: 'v';
+declaracion_variable: tipo lista_nombres ';'    { printf("  decl_var -> tipo list_nom ;%s", DELIM_SALTO_LINEA); }
+;
 
+lista_nombres
+    : nombre    { printf("  list_nom -> nom%s", DELIM_SALTO_LINEA); }
+    | lista_nombres nombre    { printf("  list_nom -> list_nom nom%s", DELIM_SALTO_LINEA); }
+;
 
+tipo
+    : '<' nombre_tipo_o_espacio_nombres '>'    { printf("  tipo -> < nom_tipo_o_esp_noms >%s", DELIM_SALTO_LINEA); }
+    | tipo_escalar    { printf("  tipo -> tipo_esc%s", DELIM_SALTO_LINEA); }
+;
+
+tipo_escalar
+    : tipo_basico    { printf("  tipo_esc -> tipo_basic%s", DELIM_SALTO_LINEA); }
+    | signo tipo_basico    { printf("  tipo_esc -> signo tipo_basic%s", DELIM_SALTO_LINEA); }
+    | longitud tipo_basico    { printf("  tipo_esc -> long tipo_basic%s", DELIM_SALTO_LINEA); }
+    | signo longitud tipo_basico    { printf("  tipo_esc -> signo long tipo_basic%s", DELIM_SALTO_LINEA); }
+;
+
+longitud
+    : SHORT    { printf("  long -> SHORT%s", DELIM_SALTO_LINEA); }
+    | LONG    { printf("  long -> LONG%s", DELIM_SALTO_LINEA); }
+;
+
+signo
+    : SIGNED    { printf("  signo -> SIGNED%s", DELIM_SALTO_LINEA); }
+    | UNSIGNED    { printf("  signo -> UNSIGNED%s", DELIM_SALTO_LINEA); }
+;
+
+tipo_basico
+    : CHAR    { printf("  tipo_basic -> CHAR%s", DELIM_SALTO_LINEA); }
+    | INT    { printf("  tipo_basic -> INT%s", DELIM_SALTO_LINEA); }
+    | FLOAT    { printf("  tipo_basic -> FLOAT%s", DELIM_SALTO_LINEA); }
+    | DOUBLE    { printf("  tipo_basic -> DOUBLE%s", DELIM_SALTO_LINEA); }
+    | BOOLEAN    { printf("  tipo_basic -> BOOLEAN%s", DELIM_SALTO_LINEA); }
+;
+
+nombre
+    : dato    { printf("  nom -> dato%s", DELIM_SALTO_LINEA); }
+    | dato '=' valor    { printf("  nom -> dato = valor%s", DELIM_SALTO_LINEA); }
+;
+
+dato
+    : dato_indexado    { printf("  dato -> dato_index%s", DELIM_SALTO_LINEA); }
+    | lista_operadores_puntero dato_indexado    { printf("  dato -> list_op_punt dato_index%s", DELIM_SALTO_LINEA); }
+;
+
+dato_indexado
+    : IDENTIFICADOR    { printf("  dato_index -> ID%s", DELIM_SALTO_LINEA); }
+    | IDENTIFICADOR '[' lista_expresiones ']'    { printf("  dato_index -> ID [ list_expr ]%s", DELIM_SALTO_LINEA); }
+;
+
+valor
+    : expresion    { printf("  valor -> expr%s", DELIM_SALTO_LINEA); }
+    | '{' lista_valores '}'    { printf("  valor -> list_val%s", DELIM_SALTO_LINEA); }
+;
+
+lista_valores
+    : valor    { printf("  list_val -> val%s", DELIM_SALTO_LINEA); }
+    | lista_valores valor    { printf("  list_val -> list_val valor%s", DELIM_SALTO_LINEA); }
+;
+    
 /*********/
 /* TIPOS */
 /*********/
 
- /* TODO: reemplazar con las reglas de la gramática reales */
-nombre_tipo: 'n';
-declaracion_tipo: 't';
-tipo: 'u';
+declaracion_tipo
+    : nombramiento_tipo    { printf("  decl_tipo -> nombram_tipo%s", DELIM_SALTO_LINEA); }
+    | declaracion_struct_union    { printf("  decl_tipo -> decl_struct_union%s", DELIM_SALTO_LINEA); }
+    | declaracion_interfaz    { printf("  decl_tipo -> decl_interf%s", DELIM_SALTO_LINEA); }
+    | declaracion_enum    { printf("  decl_tipo -> decl_enum%s", DELIM_SALTO_LINEA); }
+    | declaracion_clase    { printf("  decl_tipo -> decl_clase%s", DELIM_SALTO_LINEA); }
+;
+
+nombramiento_tipo : TYPEDEF tipo IDENTIFICADOR ';'    { printf("  nombram_tipo -> TYPEDEF tipo ID ;%s", DELIM_SALTO_LINEA); }
+;
+
+declaracion_struct_union
+    : struct_union '{' lista_declaraciones_campo '}'    { printf("  decl_struct_union -> struct_union { list_decl_campo }%s", DELIM_SALTO_LINEA); }
+    | lista_modificadores struct_union '{' lista_declaraciones_campo '}'    { printf("  decl_struct_union -> list_modif struct_union { list_decl_campo }%s", DELIM_SALTO_LINEA); }
+    | struct_union IDENTIFICADOR '{' lista_declaraciones_campo '}'    { printf("  decl_struct_union -> struct_union ID { list_decl_campo }%s", DELIM_SALTO_LINEA); }
+    | lista_modificadores struct_union IDENTIFICADOR '{' lista_declaraciones_campo '}'    { printf("  decl_struct_union -> list_modif struct_union ID { list_decl_campo }%s", DELIM_SALTO_LINEA); }
+;
+
+lista_declaraciones_campo    
+    : declaracion_campo    { printf("  list_decl_campo -> decl_campo%s", DELIM_SALTO_LINEA); }
+    | lista_declaraciones_campo declaracion_campo    { printf("  list_decl_campo -> list_decl_campo decl_campo%s", DELIM_SALTO_LINEA); }
+;
+
+lista_modificadores
+    : modificador    { printf("  list_modif -> modif%s", DELIM_SALTO_LINEA); }
+    | lista_modificadores modificador    { printf("  list_modif -> list_modif modif%s", DELIM_SALTO_LINEA); }
+;
+
+modificador
+    : NEW    { printf("  modif -> NEW%s", DELIM_SALTO_LINEA); }
+    | PUBLIC    { printf("  modif -> PUBLIC%s", DELIM_SALTO_LINEA); }
+    | PROTECTED    { printf("  modif -> PROTECTED%s", DELIM_SALTO_LINEA); }
+    | INTERNAL    { printf("  modif -> INTERNAL%s", DELIM_SALTO_LINEA); }
+    | PRIVATE    { printf("  modif -> PRIVATE%s", DELIM_SALTO_LINEA); }
+    | STATIC    { printf("  modif -> STATIC%s", DELIM_SALTO_LINEA); }
+    | VIRTUAL    { printf("  modif -> VIRTUAL%s", DELIM_SALTO_LINEA); }
+    | SEALED    { printf("  modif -> SEALED%s", DELIM_SALTO_LINEA); }
+    | OVERRIDE    { printf("  modif -> OVERRIDE%s", DELIM_SALTO_LINEA); }
+    | ABSTRACT    { printf("  modif -> ABSTRACT%s", DELIM_SALTO_LINEA); }
+    | EXTERN    { printf("  modif -> EXTERN%s", DELIM_SALTO_LINEA); }
+;
+
+struct_union
+    : STRUCT    { printf("  struct_union -> STRUCT%s", DELIM_SALTO_LINEA); }
+    | UNION    { printf("  struct_union -> UNION%s", DELIM_SALTO_LINEA); }
+;
+
+declaracion_campo
+    : tipo lista_nombres ';'    { printf("  decl_campo -> tipo list_nom%s ;", DELIM_SALTO_LINEA); }
+    | declaracion_struct_union lista_nombres ';'    { printf("  decl_campo -> decl_struct_union list_nom%s ;", DELIM_SALTO_LINEA); }
+;
+
+declaracion_interfaz
+    : INTERFACE IDENTIFICADOR herencia cuerpo_interfaz    { printf("  decl_interf -> INTERFACE ID herencia cuerpo_interf%s", DELIM_SALTO_LINEA); }
+    | lista_modificadores INTERFACE IDENTIFICADOR herencia cuerpo_interfaz    { printf("  decl_interf -> list_modif INTERFACE ID herencia cuerpo_interf%s", DELIM_SALTO_LINEA); }
+;
+
+herencia
+    :    { printf("  herencia -> %s", DELIM_SALTO_LINEA); }
+    | ';' lista_nombres_tipo_o_espacio_nombres    { printf("  herencia -> ; list_nom_tipo_o_esp_noms%s", DELIM_SALTO_LINEA); }
+;
+
+cuerpo_interfaz
+    : '{' '}' ';'    { printf("  cuerpo_interf -> { } ;%s", DELIM_SALTO_LINEA); }
+    | '{' lista_declaracion_metodo_interfaz '}'    { printf("  cuerpo_interf -> { list_decl_met_interf } ;%s", DELIM_SALTO_LINEA); }
+;
+
+lista_declaracion_metodo_interfaz
+    : declaracion_metodo_interfaz    { printf("  list_decl_met_interf -> decl_met_interf%s", DELIM_SALTO_LINEA); }
+    | lista_declaracion_metodo_interfaz declaracion_metodo_interfaz    { printf("  list_decl_met_interf -> list_decl_met_interf decl_met_interf%s", DELIM_SALTO_LINEA); }
+;
+
+declaracion_metodo_interfaz
+    : firma_funcion ';'    { printf("  decl_met_interf -> firma_func ;%s", DELIM_SALTO_LINEA); }
+    | NEW firma_funcion ';'    { printf("  decl_met_interf -> NEW firma_func ;%s", DELIM_SALTO_LINEA); }
+;
+
+declaracion_enum
+    : ENUM IDENTIFICADOR cuerpo_enum    { printf("  decl_enum -> ENUM ID cuerpo_enum%s", DELIM_SALTO_LINEA); }
+    | lista_modificadores ENUM IDENTIFICADOR cuerpo_enum    { printf("  decl_enum -> list_modif ENUM ID cuerpo_enum%s", DELIM_SALTO_LINEA); }
+    | ENUM IDENTIFICADOR ':' tipo_escalar cuerpo_enum    { printf("  decl_enum -> ENUM ID : tipo_esc cuerpo_enum%s", DELIM_SALTO_LINEA); }
+    | lista_modificadores ENUM IDENTIFICADOR ':' tipo_escalar cuerpo_enum    { printf("  decl_enum -> list_modif ENUM ID : tipo_esc cuerpo_enum%s", DELIM_SALTO_LINEA); }
+;
+
+cuerpo_enum: '{' lista_declaraciones_miembro_enum '}'    { printf("  cuerpo_enum -> { list_decl_miembro_enum }%s", DELIM_SALTO_LINEA); }
+;
+
+lista_declaraciones_miembro_enum
+    : declaracion_miembro_enum    { printf("  list_decl_miembro_enum -> decl_miembro_enum%s", DELIM_SALTO_LINEA); }
+    | lista_declaraciones_miembro_enum declaracion_miembro_enum    { printf("  list_decl_miembro_enum -> list_decl_miembro_enum decl_miembro_enum%s", DELIM_SALTO_LINEA); }
+;
+
+declaracion_miembro_enum
+    : IDENTIFICADOR    { printf("  decl_miembro_enum -> ID%s", DELIM_SALTO_LINEA); }
+    | IDENTIFICADOR '=' expresion    { printf("  decl_miembro_enum -> ID = expr%s", DELIM_SALTO_LINEA); }
+;
 
 /**********/
 /* CLASES */
 /**********/
 
+declaracion_clase
+    : CLASS IDENTIFICADOR herencia cuerpo_clase    { printf("  decl_clase -> CLASS ID herencia cuerpo_clase%s", DELIM_SALTO_LINEA); }
+    | lista_modificadores CLASS IDENTIFICADOR herencia cuerpo_clase    { printf("  decl_clase -> list_modif CLASS ID herencia cuerpo_clase%s", DELIM_SALTO_LINEA); }
+;
+
+cuerpo_clase: '{' lista_declaracion_elemento_clase '}'    { printf("  cuerpo_clase -> { list_decl_elem_clase }%s", DELIM_SALTO_LINEA); }
+;
+
+lista_declaracion_elemento_clase
+    : declaracion_elemento_clase    { printf("  list_decl_elem_clase -> decl_elem_clase%s", DELIM_SALTO_LINEA); }
+    | lista_declaracion_elemento_clase declaracion_elemento_clase    { printf("  list_decl_elem_clase -> list_decl_elem_clase decl_elem_clase%s", DELIM_SALTO_LINEA); }
+;
+
+declaracion_elemento_clase
+    : declaracion_tipo    { printf("  decl_elem_clase -> decl_tipo%s", DELIM_SALTO_LINEA); }
+    | declaracion_atributo    { printf("  decl_elem_clase -> decl_atrib%s", DELIM_SALTO_LINEA); }
+    | declaracion_metodo    { printf("  decl_elem_clase -> decl_metodo%s", DELIM_SALTO_LINEA); }
+    | declaracion_constructor    { printf("  decl_elem_clase -> decl_construct%s", DELIM_SALTO_LINEA); }
+    | declaracion_destructor    { printf("  decl_elem_clase -> decl_destruct%s", DELIM_SALTO_LINEA); }
+;
+
+declaracion_atributo
+    : declaracion_variable    { printf("  decl_atrib -> decl_var%s", DELIM_SALTO_LINEA); }
+    | lista_modificadores declaracion_variable    { printf("  decl_atrib -> list_modif decl_var%s", DELIM_SALTO_LINEA); }
+;
+
+declaracion_metodo
+    : firma_funcion bloque_instrucciones    { printf("  decl_metodo -> firma_func bloque_instr%s", DELIM_SALTO_LINEA); }
+    | lista_modificadores firma_funcion bloque_instrucciones    { printf("  decl_metodo -> list_modif firma_func bloque_instr%s", DELIM_SALTO_LINEA); }
+;
+
+declaracion_constructor
+    : cabecera_constructor bloque_instrucciones    { printf("  decl_construct -> cabec_construct bloque_instr%s", DELIM_SALTO_LINEA); }
+    | lista_modificadores cabecera_constructor bloque_instrucciones    { printf("  decl_construct -> list_modif cabec_construct bloque_instr%s", DELIM_SALTO_LINEA); }
+;
+
+cabecera_constructor
+    : IDENTIFICADOR parametros    { printf("  cabec_construct -> ID params%s", DELIM_SALTO_LINEA); }
+    | IDENTIFICADOR parametros inicializador_constructor    { printf("  cabec_construct -> ID params inicial_construct%s", DELIM_SALTO_LINEA); }
+;
+
+inicializador_constructor
+    : ':' BASE parametros    { printf("  inicial_construct -> : BASE params%s", DELIM_SALTO_LINEA); }
+    | ':' THIS parametros    { printf("  inicial_construct -> : THIS params%s", DELIM_SALTO_LINEA); }
+;
+
+declaracion_destructor
+    : cabecera_destructor bloque_instrucciones    { printf("  decl_construct -> cabec_destruct bloque_instr%s", DELIM_SALTO_LINEA); }
+    | lista_modificadores cabecera_destructor bloque_instrucciones    { printf("  decl_construct -> list_modif cabec_destruct bloque_instr%s", DELIM_SALTO_LINEA); }
+;
+
+cabecera_destructor: '~' IDENTIFICADOR '(' ')'    { printf("  cabec_destruct -> : ~ ID ( )%s", DELIM_SALTO_LINEA); }
+;
 
 /*************/
 /* FUNCIONES */
@@ -181,8 +385,128 @@ variable
 /* INSTRUCCIONES */
 /*****************/
 
- /* TODO: reemplazar con las reglas de la gramática reales */
-bloque_instrucciones: 'b';
+instruccion
+    : bloque_instrucciones
+    | instruccion_expresion
+    | instruccion_bifurcacion
+    | instruccion_bucle
+    | instruccion_salto
+    | instruccion_destino_salto
+    | instruccion_retorno
+    | instruccion_lanzamiento_excepcion
+    | instruccion_captura_excepcion
+    | instruccion_vacia
+;
+
+bloque_instrucciones
+    : '{' '}'    { printf("  bloque_instr -> { }%s", DELIM_SALTO_LINEA); }
+    | '{' lista_declaraciones '}'    { printf("  bloque_instr -> { list_decl }%s", DELIM_SALTO_LINEA); }
+    | '{' lista_instrucciones '}'    { printf("  bloque_instr -> { list_instr }%s", DELIM_SALTO_LINEA); }
+    | '{' lista_declaraciones lista_instrucciones '}'    { printf("  bloque_instr -> { list_decl list_instr }%s", DELIM_SALTO_LINEA); }
+;
+
+lista_instrucciones
+    : instruccion    
+    | lista_instrucciones instruccion    
+;
+    
+instruccion_expresion
+    : expresion_funcional ';'    { printf("  instr_expresion -> expr_funcional%s", DELIM_SALTO_LINEA); }
+    | asignacion ';'    { printf("  instr_expresion -> asig%s", DELIM_SALTO_LINEA); }
+;
+
+asignacion: expresion_indexada operador_asignacion expresion    { printf("  asig -> expr_index operador_asig expr%s", DELIM_SALTO_LINEA); }
+;
+
+operador_asignacion
+    : '='
+    | MULT_ASIG
+    | DIV_ASIG
+    | MOD_ASIG
+    | SUMA_ASIG
+    | RESTA_ASIG
+    | DESPI_ASIG
+    | DESPD_ASIG
+    | AND_ASIG
+    | XOR_ASIG
+    | OR_ASIG
+;
+
+instruccion_bifurcacion
+    : IF '(' expresion ')' instruccion    { printf("  instr_bifurcacion -> IF ( expr ) instr%s", DELIM_SALTO_LINEA); }
+    | IF '(' expresion ')' instruccion ELSE instruccion    { printf("  instr_bifurcacion -> IF ( expr ) instr ELSE instr%s", DELIM_SALTO_LINEA); }
+    | SWITCH '(' expresion ')' '{' lista_instrucciones_caso '}'    { printf("  instr_bifurcacion -> SWITCH ( expr ) { list_instr_caso }%s", DELIM_SALTO_LINEA); }
+;
+
+lista_instrucciones_caso
+    : instruccion_caso    { printf("  list_instr_caso -> instr_caso%s", DELIM_SALTO_LINEA); }
+    | lista_instrucciones_caso instruccion_caso    { printf("  list_instr_caso -> list_instr_caso instr_caso%s", DELIM_SALTO_LINEA); }
+;
+
+instruccion_caso
+    : CASE expresion ':' instruccion    { printf("  instr_caso -> CASE expr : instr%s", DELIM_SALTO_LINEA); }
+    | DEFAULT ':' instruccion    { printf("  instr_caso -> DEFAULT : instr%s", DELIM_SALTO_LINEA); }
+;
+
+instruccion_bucle
+    : WHILE '(' expresion ')' instruccion    { printf("  instr_bucle -> WHILE ( expr ) instr%s", DELIM_SALTO_LINEA); }
+    | DO instruccion WHILE '(' expresion ')' ';'    { printf("  instr_bucle -> DO instr WHILE ( expr ) ;%s", DELIM_SALTO_LINEA); }
+    | FOR '(' ';' expresion ';' lista_expresiones ')' instruccion    { printf("  instr_bucle -> FOR ( ; expr ; list_expr ) instr%s", DELIM_SALTO_LINEA); }
+    | FOR '(' lista_asignaciones ';' expresion ';' lista_expresiones ')' instruccion    { printf("  instr_bucle -> FOR ( list_asig ; expr list_expr ) instr%s", DELIM_SALTO_LINEA); }
+;
+
+lista_asignaciones
+    : asignacion    { printf("  list_asig -> asig%s", DELIM_SALTO_LINEA); }
+    | lista_asignaciones asignacion    { printf("  list_asig -> list_asig asig%s", DELIM_SALTO_LINEA); }
+;
+
+instruccion_salto
+    : GOTO IDENTIFICADOR ';'    { printf("  instr_salto -> GOTO ID ;%s", DELIM_SALTO_LINEA); }
+    | CONTINUE ';'    { printf("  instr_salto -> CONTINUE ;%s", DELIM_SALTO_LINEA); }
+    | BREAK ';'    { printf("  instr_salto -> BREAK ;%s", DELIM_SALTO_LINEA); }
+;
+
+instruccion_destino_salto
+    : IDENTIFICADOR ':' instruccion ';'    { printf("  instr_dest_salto -> ID : instr ;%s", DELIM_SALTO_LINEA); }
+;
+
+instruccion_retorno
+    : RETURN ';'    { printf("  instr_ret -> RETURN ;%s", DELIM_SALTO_LINEA); }
+    | RETURN expresion ';'    { printf("  instr_ret -> RETURN expr ;%s", DELIM_SALTO_LINEA); }
+;
+
+instruccion_lanzamiento_excepcion
+    : THROW expresion ';'    { printf("  instr_lanz_exc -> THROW expr ;%s", DELIM_SALTO_LINEA); }
+;
+
+instruccion_captura_excepcion
+    : TRY bloque_instrucciones clausulas_catch    { printf("  instr_capt_exc -> TRY bloque_instr cl_catch%s", DELIM_SALTO_LINEA); }
+    | TRY bloque_instrucciones clausula_finally    { printf("  instr_capt_exc -> TRY bloque_instr cl_finally%s", DELIM_SALTO_LINEA); }
+    | TRY bloque_instrucciones clausulas_catch clausula_finally    { printf("  instr_capt_exc -> TRY bloque_instr cl_catch cl_finally%s", DELIM_SALTO_LINEA); }
+;
+
+clausulas_catch
+    : lista_clausula_catch_especifica    { printf("  cl_catch -> list_cl_catch_esp%s", DELIM_SALTO_LINEA); }
+    | clausula_catch_general    { printf("  cl_catch -> cl_catch_gen%s", DELIM_SALTO_LINEA); }
+    | lista_clausula_catch_especifica clausula_catch_general    { printf("  cl_catch -> list_cl_catch_esp cl_catch_gen%s", DELIM_SALTO_LINEA); }
+;
+
+lista_clausula_catch_especifica    
+    : clausula_catch_especifica    { printf("  list_cl_catch_esp -> cl_catch_esp ;%s", DELIM_SALTO_LINEA); }
+    | lista_clausula_catch_especifica clausula_catch_especifica    { printf("  list_cl_catch_esp -> list_cl_catch_esp cl_catch_esp%s", DELIM_SALTO_LINEA); }
+;
+
+clausula_catch_especifica: CATCH '(' nombre_tipo ')' bloque_instrucciones    { printf("  cl_catch_esp -> CATCH ( nom_tipo ) bloque_instr%s", DELIM_SALTO_LINEA); }
+;
+
+clausula_catch_general: CATCH bloque_instrucciones    { printf("  cl_catch_gen -> CATCH bloque_instr%s", DELIM_SALTO_LINEA); }
+;
+
+clausula_finally: FINALLY bloque_instrucciones    { printf("  cl_finally -> FINALLY bloque_instr%s", DELIM_SALTO_LINEA); }
+;
+
+instruccion_vacia: ';'    { printf("  instr_vacia -> ;%s", DELIM_SALTO_LINEA); }
+;
 
 /***************/
 /* EXPRESIONES */
